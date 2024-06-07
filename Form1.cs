@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using System.IO.Ports;
 using MetroFramework.Controls;
 
@@ -22,11 +21,14 @@ namespace HanStepMotor
         private double _curveRadius = 30; // in mm
         private double _curveLength = 40;
         private bool _isResultValid;
+        private string _receiveData;
         CCInternalTube nitiTube;
+        private SerialPort usbPort = new SerialPort();
 
         public Form1()
         {
             InitializeComponent();
+            updateSerialPort();
             _kinAssistTxtBoxes[0] = kinDepthTxtBox;
             _kinAssistTxtBoxes[1] = kinHoffTxtBox;
             _kinAssistTxtBoxes[2] = kinAngTxtBox;
@@ -36,6 +38,48 @@ namespace HanStepMotor
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void updateSerialPort()
+        {
+            serialListCBox.Items.Clear();
+            foreach (var ports in SerialPort.GetPortNames()) serialListCBox.Items.Add(ports);
+            if (serialListCBox.Items.Count == 1)
+            {
+                serialListCBox.SelectedIndex = 0;
+                SerialConnectBtn.PerformClick();
+            }
+        }
+
+        private void SerialConnectBtn_Click(object sender, EventArgs e)
+        {
+            if (!usbPort.IsOpen)
+            {
+                usbPort.PortName = serialListCBox.SelectedItem.ToString();
+                usbPort.BaudRate = 9600;
+                usbPort.Parity = Parity.None;
+                usbPort.StopBits = StopBits.One;
+                usbPort.DataBits = 8;
+                usbPort.ReadBufferSize = 20000000;
+                usbPort.DataReceived += portDataReceived;
+                try { usbPort.Open(); } 
+                catch(Exception ex) { MessageBox.Show(ex.Message , "Failed to open port"); }
+            }
+        }
+
+        private void ProcessingData()
+        {
+            string tmpStr = _receiveData.ToString();
+        }
+        private void portDataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try { if (usbPort.IsOpen) _receiveData = usbPort.ReadLine(); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            try
+            {
+                this.Invoke(new Action(ProcessingData));
+            }
+            catch(ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
         }
 
         private void directCalcBtn_Click(object sender, EventArgs e)

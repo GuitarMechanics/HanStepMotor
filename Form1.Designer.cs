@@ -118,6 +118,7 @@
             this.SerialConnectBtn.Text = "CONNECT";
             this.SerialConnectBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.SerialConnectBtn.UseSelectable = true;
+            this.SerialConnectBtn.Click += new System.EventHandler(this.SerialConnectBtn_Click);
             // 
             // zeroingPosTrans
             // 
