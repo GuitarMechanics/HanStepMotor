@@ -10,7 +10,6 @@ namespace HanStepMotor
     {
         private double _curveRadius;
         private double _curveLength;
-        private double _straightLength;
 
         public CCInternalTube(double curveRadius, double curveLength)
         {
@@ -26,7 +25,7 @@ namespace HanStepMotor
             double horpos = this._curveRadius * (1 - Math.Cos(angRad));
             pos[0] = depth;
             pos[1] = horpos;
-            pos[2] = targetAngleDeg;
+            pos[2] = this._deg2Rad(targetAngleDeg);
             return pos;
         }
 
@@ -57,13 +56,13 @@ namespace HanStepMotor
         {
             double[] pos = new double[3];
             double angRad = trans / this._curveRadius;
-            return posFromAngle(angRad);
+            return posFromAngle(this._rad2Deg(angRad));
         }
 
-        public double getTransFromAng(double angRad)
+        public double getTransFromAngDeg(double angDeg)
         {
             double transVal;
-            transVal = this._curveRadius * angRad;
+            transVal = this._curveRadius * this._deg2Rad(angDeg);
             return transVal;
         }
 
@@ -71,6 +70,12 @@ namespace HanStepMotor
         {
             double retVal;
             retVal = Math.PI * 2 * deg / 360.0;
+            return retVal;
+        }
+        private double _rad2Deg(double rad)
+        {
+            double retVal;
+            retVal = rad * 180 / Math.PI;
             return retVal;
         }
     }

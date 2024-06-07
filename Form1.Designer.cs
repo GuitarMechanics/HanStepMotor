@@ -359,6 +359,7 @@
             this.depthCalcBtn.Text = "CALCULATE";
             this.depthCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.depthCalcBtn.UseSelectable = true;
+            this.depthCalcBtn.Click += new System.EventHandler(this.depthCalcBtn_Click);
             // 
             // metroLabel13
             // 
@@ -517,6 +518,7 @@
             this.hoffCalcBtn.Text = "CALCULATE";
             this.hoffCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.hoffCalcBtn.UseSelectable = true;
+            this.hoffCalcBtn.Click += new System.EventHandler(this.hoffCalcBtn_Click);
             // 
             // angCalcBtn
             // 
@@ -528,6 +530,7 @@
             this.angCalcBtn.Text = "CALCULATE";
             this.angCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.angCalcBtn.UseSelectable = true;
+            this.angCalcBtn.Click += new System.EventHandler(this.angCalcBtn_Click);
             // 
             // metroLabel17
             // 

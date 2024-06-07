@@ -17,7 +17,7 @@ namespace HanStepMotor
     {
         private MetroTextBox[] _kinAssistTxtBoxes = new MetroTextBox[3];
 
-        private double _transLimit = 25;
+        private double _transLimit = 30;
         private double _angLimitDeg = 60;
         private double _curveRadius = 30; // in mm
         private double _curveLength = 40;
@@ -40,27 +40,36 @@ namespace HanStepMotor
 
         private void directCalcBtn_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Convert.ToDouble(directTransTxtBox.Text);
-            }
-            catch(Exception) { directTransTxtBox.Text = "0"; }
-            double transValue = Convert.ToDouble(directTransTxtBox.Text);
+            double transValue = this._readTxtBoxEntry(directTransTxtBox);
+            double rotValue = this._readTxtBoxEntry(directRotTxtBox);
 
-            try
-            {
-                Convert.ToDouble(directRotTxtBox.Text);
-            }
-            catch(Exception) { directRotTxtBox.Text = "0"; }
-            double rotValue = Convert.ToDouble(directRotTxtBox.Text);
-
-            if (transValue > _transLimit || transValue < 0) _isResultValid = false;
-            else
-            {
-                _isResultValid = true;
-                _writeKinValues(nitiTube.posFromTrans(transValue));
-            }
+            _updateCalcValidity();
+            if(_isResultValid) _writeKinValues(nitiTube.posFromTrans(transValue));
             _calcResultDisplay();
+        }
+
+        private void depthCalcBtn_Click(object sender, EventArgs e)
+        {
+            double depthEntry = this._readTxtBoxEntry(kinDepthTxtBox);
+            this._writeKinValues(nitiTube.posFromDepth(depthEntry));
+            this.directTransTxtBox.Text = nitiTube.getTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
+            this.directCalcBtn.PerformClick();
+        }
+
+        private void hoffCalcBtn_Click(object sender, EventArgs e)
+        {
+            double hoffEntry = this._readTxtBoxEntry(kinHoffTxtBox);
+            this._writeKinValues(nitiTube.posFromHorpos(hoffEntry));
+            this.directTransTxtBox.Text = nitiTube.getTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
+            this.directCalcBtn.PerformClick();
+        }
+
+        private void angCalcBtn_Click(object sender, EventArgs e)
+        {
+            double angleEntry = this._readTxtBoxEntry(kinAngTxtBox);
+            this._writeKinValues(nitiTube.posFromAngle(angleEntry));
+            this.directTransTxtBox.Text = nitiTube.getTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
+            this.directCalcBtn.PerformClick();
         }
 
         private void _calcResultDisplay()
@@ -93,6 +102,19 @@ namespace HanStepMotor
             }
         }
 
-        
+        private double _readTxtBoxEntry(MetroTextBox txtBox)
+        {
+            double tmpVal;
+            try { tmpVal = Convert.ToDouble(txtBox.Text); }
+            catch(Exception) { txtBox.Text = "0"; tmpVal = 0; }
+            
+            return tmpVal;
+        }
+
+        private void _updateCalcValidity()
+        {
+            double transVal = this._readTxtBoxEntry(directTransTxtBox);
+            _isResultValid = (transVal > _transLimit || transVal < 0) ? false : true;
+        }
     }
 }
