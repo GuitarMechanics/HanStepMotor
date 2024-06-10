@@ -17,7 +17,7 @@ namespace HanStepMotor
             this._curveLength = curveLength;
         }
 
-        public double[] posFromAngle(double targetAngleDeg)
+        public double[] PosFromAngle(double targetAngleDeg)
         {
             double[] pos = new double[3];
             double angRad = this._deg2Rad(targetAngleDeg);
@@ -29,7 +29,7 @@ namespace HanStepMotor
             return pos;
         }
 
-        public double[] posFromDepth(double targetDepth)
+        public double[] PosFromDepth(double targetDepth)
         {
             double[] pos = new double[3];
             double depth = targetDepth;
@@ -41,7 +41,7 @@ namespace HanStepMotor
             return pos;
         }
 
-        public double[] posFromHorpos(double horpos)
+        public double[] PosFromHorpos(double horpos)
         {
             double[] pos = new double[3];
             double angRad = Math.Acos(1 - horpos / this._curveRadius);
@@ -52,14 +52,14 @@ namespace HanStepMotor
             return pos;
         }
 
-        public double[] posFromTrans(double trans)
+        public double[] PosFromTrans(double trans)
         {
             double[] pos = new double[3];
             double angRad = trans / this._curveRadius;
-            return posFromAngle(this._rad2Deg(angRad));
+            return PosFromAngle(this._rad2Deg(angRad));
         }
 
-        public double getTransFromAngDeg(double angDeg)
+        public double GetTransFromAngDeg(double angDeg)
         {
             double transVal;
             transVal = this._curveRadius * this._deg2Rad(angDeg);

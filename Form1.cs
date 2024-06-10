@@ -16,23 +16,43 @@ namespace HanStepMotor
     {
         private MetroTextBox[] _kinAssistTxtBoxes = new MetroTextBox[3];
 
-        private double _transLimit = 30;
-        private double _angLimitDeg = 60;
-        private double _curveRadius = 30; // in mm
-        private double _curveLength = 40;
+        private const double _transLimit = 30;
+        private const double _angLimitDeg = 60;
+        private const double _curveRadius = 30; // in mm
+        private const double _curveLength = 40;
+
+        private const int _transPitch = 10;
+        private const int _transSteps = 200; // full step
+        private const int _rotSteps = 400; // half step
+
+        private int _mtRotOffset = 0;
+        private int _mtTransOffset = 0;
+        private int _mtRotTarget;
+        private int _mtTransTarget;
+
+        private double _mtRotTargetDeg;
+        private double _mtTransTargetmm;
+
         private bool _isResultValid;
         private string _receiveData;
-        CCInternalTube nitiTube;
+
+        private bool _isMtAvail = true;
+
+        private CCInternalTube nitiTube;
+        private StepMotor transMotor;
+        private StepMotor rotMotor;
         private SerialPort usbPort = new SerialPort();
 
         public Form1()
         {
             InitializeComponent();
-            updateSerialPort();
+            UpdateSerialPort();
             _kinAssistTxtBoxes[0] = kinDepthTxtBox;
             _kinAssistTxtBoxes[1] = kinHoffTxtBox;
             _kinAssistTxtBoxes[2] = kinAngTxtBox;
             nitiTube = new CCInternalTube(_curveRadius, _curveLength);
+            transMotor = new StepMotor(_transSteps, _transPitch);
+            rotMotor = new StepMotor(_rotSteps);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,14 +60,22 @@ namespace HanStepMotor
 
         }
 
-        private void updateSerialPort()
+        private void UpdateSerialPort()
         {
             serialListCBox.Items.Clear();
             foreach (var ports in SerialPort.GetPortNames()) serialListCBox.Items.Add(ports);
             if (serialListCBox.Items.Count == 1)
             {
                 serialListCBox.SelectedIndex = 0;
-                SerialConnectBtn.PerformClick();
+                usbPort.PortName = serialListCBox.SelectedItem.ToString();
+                usbPort.BaudRate = 9600;
+                usbPort.Parity = Parity.None;
+                usbPort.StopBits = StopBits.One;
+                usbPort.DataBits = 8;
+                usbPort.ReadBufferSize = 20000000;
+                usbPort.DataReceived += PortDataReceived;
+                try { usbPort.Open(); }
+                catch (Exception ex) { MessageBox.Show(ex.Message, "Failed to open port"); }
             }
         }
 
@@ -61,7 +89,7 @@ namespace HanStepMotor
                 usbPort.StopBits = StopBits.One;
                 usbPort.DataBits = 8;
                 usbPort.ReadBufferSize = 20000000;
-                usbPort.DataReceived += portDataReceived;
+                usbPort.DataReceived += PortDataReceived;
                 try { usbPort.Open(); } 
                 catch(Exception ex) { MessageBox.Show(ex.Message , "Failed to open port"); }
             }
@@ -70,8 +98,12 @@ namespace HanStepMotor
         private void ProcessingData()
         {
             string tmpStr = _receiveData.ToString();
+            Console.WriteLine(tmpStr);
+            try { _isMtAvail = (Convert.ToInt32(tmpStr) == 11) ? true : false; }
+            catch(Exception) { };
+            _MtStatusDisplay();
         }
-        private void portDataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void PortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             try { if (usbPort.IsOpen) _receiveData = usbPort.ReadLine(); }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -82,37 +114,51 @@ namespace HanStepMotor
             catch(ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
         }
 
-        private void directCalcBtn_Click(object sender, EventArgs e)
+        private void _MtStatusDisplay()
+        {
+            if(_isMtAvail)
+            {
+                mtAvailLabel.Text = "AVAIL";
+                mtAvailLabel.ForeColor = Color.Green;
+            }
+            else
+            {
+                mtAvailLabel.Text = "RUNNING";
+                mtAvailLabel.ForeColor = Color.DarkRed;
+            }
+        }
+
+        private void DirectCalcBtn_Click(object sender, EventArgs e)
         {
             double transValue = this._readTxtBoxEntry(directTransTxtBox);
             double rotValue = this._readTxtBoxEntry(directRotTxtBox);
 
             _updateCalcValidity();
-            if(_isResultValid) _writeKinValues(nitiTube.posFromTrans(transValue));
+            if(_isResultValid) _writeKinValues(nitiTube.PosFromTrans(transValue));
             _calcResultDisplay();
         }
 
-        private void depthCalcBtn_Click(object sender, EventArgs e)
+        private void DepthCalcBtn_Click(object sender, EventArgs e)
         {
             double depthEntry = this._readTxtBoxEntry(kinDepthTxtBox);
-            this._writeKinValues(nitiTube.posFromDepth(depthEntry));
-            this.directTransTxtBox.Text = nitiTube.getTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
+            this._writeKinValues(nitiTube.PosFromDepth(depthEntry));
+            this.directTransTxtBox.Text = nitiTube.GetTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
             this.directCalcBtn.PerformClick();
         }
 
-        private void hoffCalcBtn_Click(object sender, EventArgs e)
+        private void HoffCalcBtn_Click(object sender, EventArgs e)
         {
             double hoffEntry = this._readTxtBoxEntry(kinHoffTxtBox);
-            this._writeKinValues(nitiTube.posFromHorpos(hoffEntry));
-            this.directTransTxtBox.Text = nitiTube.getTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
+            this._writeKinValues(nitiTube.PosFromHorpos(hoffEntry));
+            this.directTransTxtBox.Text = nitiTube.GetTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
             this.directCalcBtn.PerformClick();
         }
 
-        private void angCalcBtn_Click(object sender, EventArgs e)
+        private void AngCalcBtn_Click(object sender, EventArgs e)
         {
             double angleEntry = this._readTxtBoxEntry(kinAngTxtBox);
-            this._writeKinValues(nitiTube.posFromAngle(angleEntry));
-            this.directTransTxtBox.Text = nitiTube.getTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
+            this._writeKinValues(nitiTube.PosFromAngle(angleEntry));
+            this.directTransTxtBox.Text = nitiTube.GetTransFromAngDeg(this._readTxtBoxEntry(kinAngTxtBox)).ToString();
             this.directCalcBtn.PerformClick();
         }
 
@@ -126,7 +172,7 @@ namespace HanStepMotor
             else
             {
                 calcValidLabel.Text = "INVALID";
-                calcValidLabel.ForeColor = Color.Red;
+                calcValidLabel.ForeColor = Color.DarkRed;
             }
         }
 
@@ -159,6 +205,69 @@ namespace HanStepMotor
         {
             double transVal = this._readTxtBoxEntry(directTransTxtBox);
             _isResultValid = (transVal > _transLimit || transVal < 0) ? false : true;
+        }
+
+        private void mtZeroBtn_Click(object sender, EventArgs e)
+        {
+            this._mtRotTarget = 0;
+            this._mtTransTarget = 0;
+            this._mtRotTargetDeg = 0;
+            this._mtTransTargetmm = 0;
+            this._mtPosSend();
+        }
+
+        private void _mtPosSend()
+        {
+            string sendStr = (_mtTransOffset + _mtTransTarget).ToString() + "," + (_mtRotOffset + _mtRotTarget).ToString();
+            usbPort.WriteLine(sendStr);
+            this._writeMotorLabelValue();
+            Console.WriteLine("Sent : " + sendStr);
+        }
+
+        private void mtRunBtn_Click(object sender, EventArgs e)
+        {
+            this._mtRotTarget = rotMotor.Deg2Steps(this._readTxtBoxEntry(this.directRotTxtBox));
+            this._mtTransTarget = transMotor.Trans2Steps(this._readTxtBoxEntry(this.directTransTxtBox));
+            this._mtRotTargetDeg = this._readTxtBoxEntry(this.directRotTxtBox);
+            this._mtTransTargetmm = this._readTxtBoxEntry(this.directTransTxtBox);
+            this._mtPosSend();
+            this._isMtAvail = false;
+            this._MtStatusDisplay();
+        }
+
+        private void _writeMotorLabelValue()
+        {
+            this.transStatusLabel.Text = this._mtTransTargetmm.ToString();
+            this.rotStatusLabel.Text = this._mtRotTargetDeg.ToString();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this._mtRotTarget = 0;
+            this._mtTransTarget = 0;
+            this._mtRotTargetDeg = 0;
+            this._mtTransTargetmm = 0;
+            this._mtPosSend();
+        }
+
+        private void zeroingPosTrans_Click(object sender, EventArgs e)
+        {
+            this._mtTransOffset += transMotor.Trans2Steps(1.0); this._mtPosSend();
+        }
+
+        private void zeroingNegTrans_Click(object sender, EventArgs e)
+        {
+            this._mtTransOffset -= transMotor.Trans2Steps(1.0); this._mtPosSend();
+        }
+
+        private void zeroingPosRot_Click(object sender, EventArgs e)
+        {
+            this._mtRotOffset += rotMotor.Deg2Steps(1.0); this._mtPosSend();
+        }
+
+        private void zeroingNegRot_Click(object sender, EventArgs e)
+        {
+            this._mtRotOffset -= rotMotor.Deg2Steps(1.0); this._mtPosSend();
         }
     }
 }

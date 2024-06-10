@@ -64,6 +64,9 @@
             this.calcValidLabel = new MetroFramework.Controls.MetroLabel();
             this.mtRunBtn = new MetroFramework.Controls.MetroButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.mtZeroBtn = new MetroFramework.Controls.MetroButton();
+            this.mtAvailLabel = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel19 = new MetroFramework.Controls.MetroLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,7 +114,7 @@
             // SerialConnectBtn
             // 
             this.SerialConnectBtn.FontSize = MetroFramework.MetroButtonSize.Medium;
-            this.SerialConnectBtn.Location = new System.Drawing.Point(186, 117);
+            this.SerialConnectBtn.Location = new System.Drawing.Point(170, 113);
             this.SerialConnectBtn.Name = "SerialConnectBtn";
             this.SerialConnectBtn.Size = new System.Drawing.Size(80, 25);
             this.SerialConnectBtn.TabIndex = 4;
@@ -130,6 +133,7 @@
             this.zeroingPosTrans.Text = "+1 mm";
             this.zeroingPosTrans.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.zeroingPosTrans.UseSelectable = true;
+            this.zeroingPosTrans.Click += new System.EventHandler(this.zeroingPosTrans_Click);
             // 
             // zeroingNegTrans
             // 
@@ -141,6 +145,7 @@
             this.zeroingNegTrans.Text = "-1 mm";
             this.zeroingNegTrans.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.zeroingNegTrans.UseSelectable = true;
+            this.zeroingNegTrans.Click += new System.EventHandler(this.zeroingNegTrans_Click);
             // 
             // metroLabel4
             // 
@@ -164,6 +169,7 @@
             this.zeroingPosRot.Text = "+1 deg";
             this.zeroingPosRot.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.zeroingPosRot.UseSelectable = true;
+            this.zeroingPosRot.Click += new System.EventHandler(this.zeroingPosRot_Click);
             // 
             // zeroingNegRot
             // 
@@ -175,6 +181,7 @@
             this.zeroingNegRot.Text = "-1 deg";
             this.zeroingNegRot.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.zeroingNegRot.UseSelectable = true;
+            this.zeroingNegRot.Click += new System.EventHandler(this.zeroingNegRot_Click);
             // 
             // metroLabel5
             // 
@@ -348,7 +355,7 @@
             this.directCalcBtn.Text = "CALCULATE";
             this.directCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.directCalcBtn.UseSelectable = true;
-            this.directCalcBtn.Click += new System.EventHandler(this.directCalcBtn_Click);
+            this.directCalcBtn.Click += new System.EventHandler(this.DirectCalcBtn_Click);
             // 
             // depthCalcBtn
             // 
@@ -360,7 +367,7 @@
             this.depthCalcBtn.Text = "CALCULATE";
             this.depthCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.depthCalcBtn.UseSelectable = true;
-            this.depthCalcBtn.Click += new System.EventHandler(this.depthCalcBtn_Click);
+            this.depthCalcBtn.Click += new System.EventHandler(this.DepthCalcBtn_Click);
             // 
             // metroLabel13
             // 
@@ -519,7 +526,7 @@
             this.hoffCalcBtn.Text = "CALCULATE";
             this.hoffCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.hoffCalcBtn.UseSelectable = true;
-            this.hoffCalcBtn.Click += new System.EventHandler(this.hoffCalcBtn_Click);
+            this.hoffCalcBtn.Click += new System.EventHandler(this.HoffCalcBtn_Click);
             // 
             // angCalcBtn
             // 
@@ -531,7 +538,7 @@
             this.angCalcBtn.Text = "CALCULATE";
             this.angCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.angCalcBtn.UseSelectable = true;
-            this.angCalcBtn.Click += new System.EventHandler(this.angCalcBtn_Click);
+            this.angCalcBtn.Click += new System.EventHandler(this.AngCalcBtn_Click);
             // 
             // metroLabel17
             // 
@@ -579,6 +586,7 @@
             this.mtRunBtn.Text = "RUN";
             this.mtRunBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.mtRunBtn.UseSelectable = true;
+            this.mtRunBtn.Click += new System.EventHandler(this.mtRunBtn_Click);
             // 
             // pictureBox1
             // 
@@ -589,6 +597,44 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
+            // 
+            // mtZeroBtn
+            // 
+            this.mtZeroBtn.FontSize = MetroFramework.MetroButtonSize.Medium;
+            this.mtZeroBtn.Location = new System.Drawing.Point(367, 355);
+            this.mtZeroBtn.Name = "mtZeroBtn";
+            this.mtZeroBtn.Size = new System.Drawing.Size(80, 25);
+            this.mtZeroBtn.TabIndex = 4;
+            this.mtZeroBtn.Text = "ZERO POS";
+            this.mtZeroBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.mtZeroBtn.UseSelectable = true;
+            this.mtZeroBtn.Click += new System.EventHandler(this.mtZeroBtn_Click);
+            // 
+            // mtAvailLabel
+            // 
+            this.mtAvailLabel.AutoSize = true;
+            this.mtAvailLabel.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.mtAvailLabel.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.mtAvailLabel.ForeColor = System.Drawing.Color.Green;
+            this.mtAvailLabel.Location = new System.Drawing.Point(425, 200);
+            this.mtAvailLabel.Name = "mtAvailLabel";
+            this.mtAvailLabel.Size = new System.Drawing.Size(63, 25);
+            this.mtAvailLabel.TabIndex = 8;
+            this.mtAvailLabel.Text = "AVAIL";
+            this.mtAvailLabel.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.mtAvailLabel.UseCustomForeColor = true;
+            // 
+            // metroLabel19
+            // 
+            this.metroLabel19.AutoSize = true;
+            this.metroLabel19.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel19.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.metroLabel19.Location = new System.Drawing.Point(304, 200);
+            this.metroLabel19.Name = "metroLabel19";
+            this.metroLabel19.Size = new System.Drawing.Size(115, 25);
+            this.metroLabel19.TabIndex = 8;
+            this.metroLabel19.Text = "Motor Status";
+            this.metroLabel19.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
             // Form1
             // 
@@ -604,6 +650,7 @@
             this.Controls.Add(this.metroLabel16);
             this.Controls.Add(this.rotStatusLabel);
             this.Controls.Add(this.metroLabel15);
+            this.Controls.Add(this.mtAvailLabel);
             this.Controls.Add(this.calcValidLabel);
             this.Controls.Add(this.metroLabel18);
             this.Controls.Add(this.metroLabel12);
@@ -612,6 +659,7 @@
             this.Controls.Add(this.metroLabel11);
             this.Controls.Add(this.metroLabel13);
             this.Controls.Add(this.transStatusLabel);
+            this.Controls.Add(this.metroLabel19);
             this.Controls.Add(this.metroLabel10);
             this.Controls.Add(this.metroLabel6);
             this.Controls.Add(this.metroLabel5);
@@ -623,6 +671,7 @@
             this.Controls.Add(this.hoffCalcBtn);
             this.Controls.Add(this.depthCalcBtn);
             this.Controls.Add(this.zeroingPosTrans);
+            this.Controls.Add(this.mtZeroBtn);
             this.Controls.Add(this.mtRunBtn);
             this.Controls.Add(this.directCalcBtn);
             this.Controls.Add(this.SerialConnectBtn);
@@ -635,6 +684,7 @@
             this.Style = MetroFramework.MetroColorStyle.White;
             this.Text = "StepDriver";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -680,6 +730,9 @@
         private MetroFramework.Controls.MetroLabel calcValidLabel;
         private MetroFramework.Controls.MetroButton mtRunBtn;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private MetroFramework.Controls.MetroButton mtZeroBtn;
+        private MetroFramework.Controls.MetroLabel mtAvailLabel;
+        private MetroFramework.Controls.MetroLabel metroLabel19;
     }
 }
 
