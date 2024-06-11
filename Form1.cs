@@ -22,8 +22,8 @@ namespace HanStepMotor
         private const double _curveLength = 40;
 
         private const int _transPitch = 10;
-        private const int _transSteps = 200; // full step
-        private const int _rotSteps = 400; // half step
+        private const int _transSteps = 800;
+        private const int _rotSteps = 800;
 
         private int _mtRotOffset = 0;
         private int _mtTransOffset = 0;
@@ -37,6 +37,7 @@ namespace HanStepMotor
         private string _receiveData;
 
         private bool _isMtAvail = true;
+        private bool _isFuncIdle = true;
 
         private CCInternalTube nitiTube;
         private StepMotor transMotor;
@@ -218,7 +219,15 @@ namespace HanStepMotor
 
         private void _mtPosSend()
         {
-            string sendStr = (_mtTransOffset + _mtTransTarget).ToString() + "," + (_mtRotOffset + _mtRotTarget).ToString();
+            string sendStr = 0.ToString() + "," + (_mtTransOffset + _mtTransTarget).ToString() + "," + (_mtRotOffset + _mtRotTarget).ToString();
+            usbPort.WriteLine(sendStr);
+            this._writeMotorLabelValue();
+            Console.WriteLine("Sent : " + sendStr);
+        }
+
+        private void _mtZeroPosSend()
+        {
+            string sendStr = 1.ToString() + "," + (_mtTransOffset + _mtTransTarget).ToString() + "," + (_mtRotOffset + _mtRotTarget).ToString();
             usbPort.WriteLine(sendStr);
             this._writeMotorLabelValue();
             Console.WriteLine("Sent : " + sendStr);
@@ -243,31 +252,34 @@ namespace HanStepMotor
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this._mtRotTarget = 0;
-            this._mtTransTarget = 0;
-            this._mtRotTargetDeg = 0;
-            this._mtTransTargetmm = 0;
-            this._mtPosSend();
+            if(usbPort.IsOpen)
+            {
+                this._mtRotTarget = 0;
+                this._mtTransTarget = 0;
+                this._mtRotTargetDeg = 0;
+                this._mtTransTargetmm = 0;
+                this._mtPosSend();
+            }
         }
 
         private void zeroingPosTrans_Click(object sender, EventArgs e)
         {
-            this._mtTransOffset += transMotor.Trans2Steps(1.0); this._mtPosSend();
+            this._mtTransOffset += transMotor.Trans2Steps(1.0); this._mtZeroPosSend();
         }
 
         private void zeroingNegTrans_Click(object sender, EventArgs e)
         {
-            this._mtTransOffset -= transMotor.Trans2Steps(1.0); this._mtPosSend();
+            this._mtTransOffset -= transMotor.Trans2Steps(1.0); this._mtZeroPosSend();
         }
 
         private void zeroingPosRot_Click(object sender, EventArgs e)
         {
-            this._mtRotOffset += rotMotor.Deg2Steps(1.0); this._mtPosSend();
+            this._mtRotOffset += rotMotor.Deg2Steps(1.0); this._mtZeroPosSend();
         }
 
         private void zeroingNegRot_Click(object sender, EventArgs e)
         {
-            this._mtRotOffset -= rotMotor.Deg2Steps(1.0); this._mtPosSend();
+            this._mtRotOffset -= rotMotor.Deg2Steps(1.0); this._mtZeroPosSend();
         }
     }
 }
