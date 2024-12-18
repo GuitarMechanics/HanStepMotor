@@ -338,7 +338,7 @@
             this.directRotTxtBox.SelectionStart = 0;
             this.directRotTxtBox.ShortcutsEnabled = true;
             this.directRotTxtBox.Size = new System.Drawing.Size(75, 23);
-            this.directRotTxtBox.TabIndex = 9;
+            this.directRotTxtBox.TabIndex = 10;
             this.directRotTxtBox.Text = "0";
             this.directRotTxtBox.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.directRotTxtBox.UseSelectable = true;
@@ -351,7 +351,7 @@
             this.directCalcBtn.Location = new System.Drawing.Point(360, 318);
             this.directCalcBtn.Name = "directCalcBtn";
             this.directCalcBtn.Size = new System.Drawing.Size(80, 25);
-            this.directCalcBtn.TabIndex = 4;
+            this.directCalcBtn.TabIndex = 11;
             this.directCalcBtn.Text = "CALCULATE";
             this.directCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.directCalcBtn.UseSelectable = true;
@@ -363,7 +363,7 @@
             this.depthCalcBtn.Location = new System.Drawing.Point(685, 255);
             this.depthCalcBtn.Name = "depthCalcBtn";
             this.depthCalcBtn.Size = new System.Drawing.Size(80, 25);
-            this.depthCalcBtn.TabIndex = 4;
+            this.depthCalcBtn.TabIndex = 14;
             this.depthCalcBtn.Text = "CALCULATE";
             this.depthCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.depthCalcBtn.UseSelectable = true;
@@ -431,7 +431,7 @@
             this.kinDepthTxtBox.SelectionStart = 0;
             this.kinDepthTxtBox.ShortcutsEnabled = true;
             this.kinDepthTxtBox.Size = new System.Drawing.Size(75, 23);
-            this.kinDepthTxtBox.TabIndex = 9;
+            this.kinDepthTxtBox.TabIndex = 13;
             this.kinDepthTxtBox.Text = "0";
             this.kinDepthTxtBox.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.kinDepthTxtBox.UseSelectable = true;
@@ -464,7 +464,7 @@
             this.kinHoffTxtBox.SelectionStart = 0;
             this.kinHoffTxtBox.ShortcutsEnabled = true;
             this.kinHoffTxtBox.Size = new System.Drawing.Size(75, 23);
-            this.kinHoffTxtBox.TabIndex = 9;
+            this.kinHoffTxtBox.TabIndex = 15;
             this.kinHoffTxtBox.Text = "0";
             this.kinHoffTxtBox.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.kinHoffTxtBox.UseSelectable = true;
@@ -509,7 +509,7 @@
             this.kinAngTxtBox.SelectionStart = 0;
             this.kinAngTxtBox.ShortcutsEnabled = true;
             this.kinAngTxtBox.Size = new System.Drawing.Size(75, 23);
-            this.kinAngTxtBox.TabIndex = 9;
+            this.kinAngTxtBox.TabIndex = 17;
             this.kinAngTxtBox.Text = "0";
             this.kinAngTxtBox.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.kinAngTxtBox.UseSelectable = true;
@@ -522,7 +522,7 @@
             this.hoffCalcBtn.Location = new System.Drawing.Point(685, 287);
             this.hoffCalcBtn.Name = "hoffCalcBtn";
             this.hoffCalcBtn.Size = new System.Drawing.Size(80, 25);
-            this.hoffCalcBtn.TabIndex = 4;
+            this.hoffCalcBtn.TabIndex = 16;
             this.hoffCalcBtn.Text = "CALCULATE";
             this.hoffCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.hoffCalcBtn.UseSelectable = true;
@@ -534,7 +534,7 @@
             this.angCalcBtn.Location = new System.Drawing.Point(685, 320);
             this.angCalcBtn.Name = "angCalcBtn";
             this.angCalcBtn.Size = new System.Drawing.Size(80, 25);
-            this.angCalcBtn.TabIndex = 4;
+            this.angCalcBtn.TabIndex = 18;
             this.angCalcBtn.Text = "CALCULATE";
             this.angCalcBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.angCalcBtn.UseSelectable = true;
@@ -543,11 +543,12 @@
             // metroLabel17
             // 
             this.metroLabel17.AutoSize = true;
-            this.metroLabel17.Location = new System.Drawing.Point(604, 348);
+            this.metroLabel17.Location = new System.Drawing.Point(499, 348);
             this.metroLabel17.Name = "metroLabel17";
-            this.metroLabel17.Size = new System.Drawing.Size(145, 19);
+            this.metroLabel17.Size = new System.Drawing.Size(278, 38);
             this.metroLabel17.TabIndex = 3;
-            this.metroLabel17.Text = "Only 1 entry is required";
+            this.metroLabel17.Text = "Only 1 entry is required when using assistant.\r\nCalculated by Constant Curvature " +
+    "assumption.";
             this.metroLabel17.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
             // metroLabel18
@@ -582,7 +583,7 @@
             this.mtRunBtn.Location = new System.Drawing.Point(281, 355);
             this.mtRunBtn.Name = "mtRunBtn";
             this.mtRunBtn.Size = new System.Drawing.Size(80, 25);
-            this.mtRunBtn.TabIndex = 4;
+            this.mtRunBtn.TabIndex = 12;
             this.mtRunBtn.Text = "RUN";
             this.mtRunBtn.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.mtRunBtn.UseSelectable = true;

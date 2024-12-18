@@ -56,6 +56,8 @@ namespace HanStepMotor
             rotMotor = new StepMotor(_rotSteps);
         }
 
+        //Serial functions
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -115,6 +117,7 @@ namespace HanStepMotor
             catch(ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
         }
 
+        // Motor pos. calculation && operation
         private void _MtStatusDisplay()
         {
             if(_isMtAvail)
@@ -222,7 +225,8 @@ namespace HanStepMotor
             string sendStr = 0.ToString() + "," + (_mtTransOffset + _mtTransTarget).ToString() + "," + (_mtRotOffset + _mtRotTarget).ToString();
             usbPort.WriteLine(sendStr);
             this._writeMotorLabelValue();
-            Console.WriteLine("Sent : " + sendStr);
+            //Console.WriteLine("Sent : " + sendStr);
+            this._isMtAvail = false;
         }
 
         private void _mtZeroPosSend()
@@ -230,7 +234,8 @@ namespace HanStepMotor
             string sendStr = 1.ToString() + "," + (_mtTransOffset + _mtTransTarget).ToString() + "," + (_mtRotOffset + _mtRotTarget).ToString();
             usbPort.WriteLine(sendStr);
             this._writeMotorLabelValue();
-            Console.WriteLine("Sent : " + sendStr);
+            //Console.WriteLine("Sent : " + sendStr);
+            this._isMtAvail = false;
         }
 
         private void mtRunBtn_Click(object sender, EventArgs e)
@@ -240,7 +245,6 @@ namespace HanStepMotor
             this._mtRotTargetDeg = this._readTxtBoxEntry(this.directRotTxtBox);
             this._mtTransTargetmm = this._readTxtBoxEntry(this.directTransTxtBox);
             this._mtPosSend();
-            this._isMtAvail = false;
             this._MtStatusDisplay();
         }
 
@@ -250,17 +254,6 @@ namespace HanStepMotor
             this.rotStatusLabel.Text = this._mtRotTargetDeg.ToString();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if(usbPort.IsOpen)
-            {
-                this._mtRotTarget = 0;
-                this._mtTransTarget = 0;
-                this._mtRotTargetDeg = 0;
-                this._mtTransTargetmm = 0;
-                this._mtPosSend();
-            }
-        }
 
         private void zeroingPosTrans_Click(object sender, EventArgs e)
         {
@@ -280,6 +273,18 @@ namespace HanStepMotor
         private void zeroingNegRot_Click(object sender, EventArgs e)
         {
             this._mtRotOffset -= rotMotor.Deg2Steps(1.0); this._mtZeroPosSend();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (usbPort.IsOpen)
+            {
+                this._mtRotTarget = 0;
+                this._mtTransTarget = 0;
+                this._mtRotTargetDeg = 0;
+                this._mtTransTargetmm = 0;
+                this._mtPosSend();
+            }
         }
     }
 }
