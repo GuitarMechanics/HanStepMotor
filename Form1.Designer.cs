@@ -1,4 +1,5 @@
 ﻿namespace HanStepMotor
+    // jhc
 {
     partial class Form1
     {
